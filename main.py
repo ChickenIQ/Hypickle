@@ -7,7 +7,10 @@ load_dotenv()
 
 bot = commands.Bot(command_prefix=getenv('PREFIX'), case_insensitive=True)
 bot.remove_command('help')
-bot.sniped_messages = {}
+snipe_message_author = {}
+snipe_message_content = {}
+snipe_message_time = {}
+
 
 @bot.event
 async def on_ready():
@@ -23,24 +26,26 @@ async def help(ctx):
  
 @bot.event
 async def on_message_delete(message):
-    bot.sniped_messages[message.guild.id] = (message.content, message.author, message.channel.name, message.created_at)
-
+    snipe_message_author[message.channel.id] = message.author
+    snipe_message_content[message.channel.id] = message.content
+    snipe_message_time[message.guild.id] = message.created_at
+ 
+ 
 @bot.command()
 async def snipe(ctx):
+    channel = ctx.channel
+    guild = ctx.guild
     try:
-        contents, author, channel_name, time = bot.sniped_messages[ctx.guild.id]
+        content = snipe_message_content[channel.id]
+        author = snipe_message_author[channel.id]
+        time = snipe_message_time[guild.id]
+        embed = discord.Embed(description=content, color=discord.Color.red(), timestamp=time)
+        embed.set_author(name=f"{author}", icon_url=author.avatar_url)
+        embed.set_footer(text=f"Deleted in #{channel.name}")
+        await ctx.send(embed = embed)
         
     except:
         await ctx.channel.send("Couldn't find a message to snipe!")
-        return
-
-    embed = discord.Embed(description=contents, color=discord.Color.red(), timestamp=time)
-    embed.set_author(name=f"{author.name}#{author.discriminator}", icon_url=author.avatar_url)
-    embed.set_footer(text=f"Deleted in : #{channel_name}")
-    
-    await ctx.channel.send(embed=embed)
 
 
 bot.run(getenv('TOKEN'))
-
-
