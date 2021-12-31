@@ -48,4 +48,10 @@ async def snipe(ctx):
         await ctx.channel.send("Couldn't find a message to snipe!")
 
 
+# Ping command
+@bot.command()
+async def ping(ctx):
+    await ctx.reply(f'Ping: {round (bot.latency * 1000)} ms')
+
+
 bot.run(getenv('TOKEN'))
