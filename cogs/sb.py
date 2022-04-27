@@ -12,13 +12,13 @@ class sb(commands.Cog):
 
 	@commands.command()
 	async def sb(self, ctx, IGN: typing.Optional[str]):
-		if(IGN == None):
-			IGN=ctx.author.nick
-			if(IGN == None):
-					await ctx.send("Nickname not set, using username instead.",delete_after=1)
-					IGN=ctx.author.name
-
 		try:
+			if(IGN == None):
+				IGN=ctx.author.nick
+				if(IGN == None):
+						await ctx.send("Nickname not set, using username instead.",delete_after=1)
+						IGN=ctx.author.name
+
    
 			FETCHING=discord.Embed(description="Fetching data from API", color=0xff0000)
 			msg = await ctx.send(embed=FETCHING)
