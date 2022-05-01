@@ -1,3 +1,4 @@
+from calendar import c
 from discord.ext import commands
 
 class ping(commands.Cog):
