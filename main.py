@@ -3,6 +3,7 @@ from discord.ext import commands
 import os
 from dotenv import load_dotenv
 from os import getenv
+import logging
 
 load_dotenv()
 intents = discord.Intents.default()
@@ -30,6 +31,13 @@ async def reload(ctx):
     else:
         await ctx.reply("Only Developers can use this command.")
     
+    
+logger = logging.getLogger('discord')
+logger.setLevel(logging.DEBUG)
+handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
+
 
 @bot.event
 async def on_ready():
@@ -37,6 +45,7 @@ async def on_ready():
     print('Logged in as', bot.user.name)
     print("Servers:",len(bot.guilds))
     print("\n".join(guild.name for guild in bot.guilds))
+    
 
 bot.run(getenv('TOKEN'))
 

@@ -22,7 +22,6 @@ class bedwars(commands.Cog):
 			
 			try: #Check if the user exists.
 				mojangapi = requests.get(f"https://api.mojang.com/users/profiles/minecraft/{IGN}").json()
-				UUID = mojangapi["id"]
 				IGN = mojangapi["name"]
 			except Exception: 
 				embed=discord.Embed(description=f"Please enter a valid username", color=0xff0000)
@@ -30,7 +29,7 @@ class bedwars(commands.Cog):
 				return 0
 
 			APIKEY = getenv('APIKEY')
-			slothpixel = requests.get(f"https://api.slothpixel.me/api/players/{UUID}?key={APIKEY}").json()
+			slothpixel = requests.get(f"https://api.slothpixel.me/api/players/{IGN}?key={APIKEY}").json()
 			overall = slothpixel["stats"]["BedWars"]
 			solo = slothpixel["stats"]["BedWars"]["gamemodes"]["solo"]
 			doubles = slothpixel["stats"]["BedWars"]["gamemodes"]["doubles"]
